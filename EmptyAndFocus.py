@@ -25,6 +25,10 @@ showSummary = False
 startTime = 0
 countTime = 0
 tick = pygame.time.Clock()
+record = []
+recFont = pygame.font.SysFont(fonts[1],18)
+recFontHeight = recFont.get_linesize()
+best = 0
 
 btnFont = pygame.font.SysFont(fonts[5],20)
 # btnFontPath = pygame.font.match_font(fonts[9])
@@ -60,6 +64,8 @@ while True:
 						# 游戏结束，显示结果
 						showSummary = True
 						countTime = time.time()-startTime
+						record.append(round(countTime,2))
+						best = min(record)
 						print(countTime)
 		# 处理鼠标键抬起事件
 		if event.type == pygame.MOUSEBUTTONUP:
@@ -89,6 +95,10 @@ while True:
 	if showSummary:
 		screen.blit(font.render(str(countTime),True,(0,64,255)),(5*line_width+font_height/4,320))
 		btnText = "再试一次"
+		left = 5*line_width+20
+		for i in range(len(record) if len(record)<8 else 8):
+			screen.blit(recFont.render(str(record[-i-1]),True,(0,208,0)), (left,120+i*25))
+		screen.blit(recFont.render("best:"+str(best),True,(0,224,0)), (left-10,90))
 	else:
 		btnText = "重新开始"
 	# 绘制按钮
